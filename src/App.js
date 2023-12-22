@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import { FaMoon } from "react-icons/fa";
 import { BsFillSunFill } from "react-icons/bs";
@@ -15,10 +15,17 @@ const data = [
 ];
 
 function App() {
-  const [isDark, setIsDark] = useState(false);
+  const ref = useRef(false);
+  const [isDark, setIsDark] = useState(ref.current);
   const [taskList, setTaskList] = useState(data);
   const [filter, setFilter] = useState("all");
   const [filteredTodos, setFilteredTodos] = useState(taskList);
+
+  useEffect(() => {
+    const prefersDarkTheme = window.matchMedia("(prefers-color-scheme: dark)");
+    ref.current = prefersDarkTheme.matches;
+    setIsDark(ref.current);
+  }, []);
 
   useEffect(() => {
     const handleFilter = () => {
@@ -80,7 +87,7 @@ function App() {
                 taskList={taskList}
                 setTaskList={setTaskList}
                 filteredTodos={filteredTodos}
-                setFilteredTodos = {setFilteredTodos}
+                setFilteredTodos={setFilteredTodos}
                 filter={filter}
                 setFilter={setFilter}
                 isDark={isDark}
